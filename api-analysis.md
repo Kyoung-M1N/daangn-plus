@@ -99,6 +99,15 @@ https://www.daangn.com/articles/[매물번호]
   
   ...
 
+  <p id="article-category">
+    스포츠/레저 ∙
+    <time>
+      끌올 5일 전
+    </time>
+  </p>
+
+  ...
+
   <p id="article-counts">
     채팅 10 ∙ 관심 16 ∙ 조회 646
   </p>
@@ -106,32 +115,3 @@ https://www.daangn.com/articles/[매물번호]
   ...
 
 ```
-
-## 시나리오
- 1. `https://www.daangn.com/search/[검색어 한글 유니코드]/more/flea_market?page=[페이지 번호]` 를 통해서 원하는 매물 검색 (페이지 번호: 1~10까지)
-    1. `.flea-market-article-link` -> href에서 article 번호 추출
-    2. `.card-photo` -> img 태그에서 사진 링크 추출
-    3. `.article-title` -> 제목 정보 추출
-    4. `.article-region-name` -> 지역 정보 추출
-    5. `.article-price` -> 가격 정보 추출
- 2. 1-1번에서 추출한 매물번호 -> `https://www.daangn.com/articles/[매물번호]`
-    1. `#article-counts` -> 채팅, 관심, 조회 추출
-    2. `meta name="product:availability"` -> 현재 상태 추출
- 3. json으로 정리
-    ```json
-    {
-      "result" : [
-        {
-          "title": "link",
-          "article" : 000000,
-          "photo" : "link",
-          "location" : "location",
-          "price" : "400,000원",
-          "likes" : 0,
-          "views" : 0,
-          "chats" : 0,
-        },
-        ...
-      ]
-    }
-    ```

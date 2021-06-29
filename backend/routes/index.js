@@ -162,6 +162,7 @@ var getList = (keyword) => new Promise(async (resolve) => {
 
 
 
+
 // https://miiingo.tistory.com/180
 // second minute hour day-of-month month day-of-week
 cron.schedule('* * * * *', async () => {
@@ -222,10 +223,10 @@ cron.schedule('* * * * *', async () => {
         }
 
 
-        var sendStr = `[${global.keyword}] 새로운 매물이 ${sendArticles.length}건 있습니다!\n\n`
+        var sendStr = `[[${global.keyword}]] 새로운 매물이 ${sendArticles.length}건 있습니다!\n\n`
         
         for(var k of sendArticles)
-          sendStr += ` · ${k.title}\n   ${k.time} / ${k.price}\n   [바로가기](https://www.daangn.com/articles/${k.article})\n\n`
+          sendStr += ` · ${k.title}\n   ${k.time} / ${k.price}\n   ${k.location}\n   [→ 앱에서 확인하기](https://www.daangn.com/articles/${k.article})\n\n`
 
         bot.sendMessage(global.telegramId, sendStr, {"parse_mode": "Markdown"})
 

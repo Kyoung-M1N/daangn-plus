@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'mapView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -41,6 +41,18 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
+                CupertinoButton(
+                    color: Colors.grey.shade200,
+                    child: Text(
+                      "Map",
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => MapPage()));
+                    }),
                 Expanded(
                   child: Container(
                     child: !isLoading

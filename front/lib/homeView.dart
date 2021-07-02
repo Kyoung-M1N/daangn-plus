@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
                               color: Colors.grey.shade600,
                             ),
                           ),
-                          onPressed: () => getList(),
+                          onPressed: () => getList().then((_) => getCoordinates()),
                         ),
                       ),
                     ),
@@ -50,6 +50,8 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     onPressed: () {
+                      markersList.clear();
+                      setMarker(dItems);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (_) => MapPage()));
                     }),

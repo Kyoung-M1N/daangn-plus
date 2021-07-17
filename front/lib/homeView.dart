@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_geocoding/google_geocoding.dart';
 import 'mapView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   bool isLoading = false;
+  List<GeocodingResponse> list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +30,15 @@ class _HomeViewState extends State<HomeView> {
                     Expanded(
                       child: Container(
                         child: CupertinoButton(
-                          color: Colors.grey.shade200,
-                          child: Text(
-                            "Load",
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
+                            color: Colors.grey.shade200,
+                            child: Text(
+                              "Load",
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                              ),
                             ),
-                          ),
-                          onPressed: () => getList().then((_) => getCoordinates()),
-                        ),
+                            onPressed: () =>
+                                getList().then((_) => getCoordinates())),
                       ),
                     ),
                   ],
@@ -50,8 +52,8 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     onPressed: () {
-                      markersList.clear();
-                      setMarker(dItems);
+                      //markersList.clear();
+                      //setMarker(dItems);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (_) => MapPage()));
                     }),
@@ -75,16 +77,16 @@ class _HomeViewState extends State<HomeView> {
                                             Row(
                                               children: [
                                                 Expanded(
-                                                  child: Image.network(
-                                                    item.photo,
-                                                    fit: BoxFit.fitWidth,
-                                                  ),
-                                                  // child: Image(
+                                                  // child: Image.network(
+                                                  //   item.photo,
                                                   //   fit: BoxFit.fitWidth,
-                                                  //   image: AssetImage(
-                                                  //     "sample.png",
-                                                  //   ),
                                                   // ),
+                                                  child: Image(
+                                                    fit: BoxFit.fitWidth,
+                                                    image: AssetImage(
+                                                      "sample.png",
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -298,17 +300,18 @@ class _HomeViewState extends State<HomeView> {
       for (var i in tmp) {
         dItems.add(
           new DaangnItem(
-            article: i['article'],
-            photo: i['photo'],
-            title: i['title'],
-            location: i['location'],
-            price: i['price'],
-            status: i['status'],
-            chats: i['chats'],
-            likes: i['likes'],
-            views: i['views'],
-            time: i['time'],
-          ),
+              article: i['article'],
+              photo: i['photo'],
+              title: i['title'],
+              location: i['location'],
+              price: i['price'],
+              status: i['status'],
+              chats: i['chats'],
+              likes: i['likes'],
+              views: i['views'],
+              time: i['time'],
+              latitude: 0,
+              longitude: 0),
         );
       }
 
@@ -332,6 +335,8 @@ class DaangnItem {
     required this.likes,
     required this.views,
     required this.time,
+    required this.latitude,
+    required this.longitude,
   });
 
   final int article;
@@ -344,4 +349,6 @@ class DaangnItem {
   final int likes;
   final int views;
   final String time;
+  double latitude;
+  double longitude;
 }

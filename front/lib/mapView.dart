@@ -53,7 +53,7 @@ class _MapPageState extends State<MapPage> {
       scroll = false;
     });
     showCupertinoModalPopup(
-        barrierDismissible: false,
+        barrierDismissible: true,
         barrierColor: Colors.white.withAlpha(0),
         context: context,
         builder: (_) => Container(
@@ -74,7 +74,7 @@ class _MapPageState extends State<MapPage> {
                                 subtitle: Text('${item.price}'),
                                 trailing: CupertinoButton(
                                   color: item.status == "instock"
-                                      ? Colors.orange
+                                      ? Colors.deepPurple
                                       : Colors.grey.shade300,
                                   padding: EdgeInsets.all(0),
                                   onPressed: () => html.window.open(
@@ -203,20 +203,6 @@ class _MapPageState extends State<MapPage> {
       drawer: Drawer(
           child: Column(
         children: [
-          ListTile(
-            trailing: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  setState(() {
-                    zoom = true;
-                    scroll = true;
-                  });
-
-                  loading = false;
-                  markerResource.clear();
-                },
-                icon: Icon(Icons.arrow_back)),
-          ),
           Expanded(
               child: Container(
             child: loading
@@ -230,7 +216,7 @@ class _MapPageState extends State<MapPage> {
                             subtitle: Text('${item.price}'),
                             trailing: CupertinoButton(
                               color: item.status == "instock"
-                                  ? Colors.orange
+                                  ? Colors.deepPurple
                                   : Colors.grey.shade300,
                               padding: EdgeInsets.all(0),
                               onPressed: () => html.window.open(
@@ -246,9 +232,23 @@ class _MapPageState extends State<MapPage> {
                         ));
                       }
                       return Column(children: [
-                        Text(
-                          '현재 위치 : ${markerResource[0].location}',
-                          style: TextStyle(fontSize: 15),
+                        ListTile(
+                          title: Text(
+                            '현재 위치 : ${markerResource[0].location}',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                setState(() {
+                                  zoom = true;
+                                  scroll = true;
+                                });
+
+                                loading = false;
+                                markerResource.clear();
+                              },
+                              icon: Icon(Icons.arrow_back)),
                         ),
                         Column(
                           children: result,
@@ -299,23 +299,29 @@ class _MapPageState extends State<MapPage> {
 }
 
 List<Component> component = [Component("component", 'value')];
-GoogleGeocoding googleGeocoding =
-    GoogleGeocoding("API_KEY");
 
 void getCoordinates() async {
   print(dItems.length);
   for (int i = 0; i < dItems.length; i++) {
+    await Future.delayed(Duration(milliseconds: 30));
     geoCoding(i);
   }
 }
 
 Future<GeocodingResponse?> geoCoding(int i) async {
+  GoogleGeocoding googleGeocoding =
+      GoogleGeocoding("API_KEY");
   var result =
       await googleGeocoding.geocoding.get('${dItems[i].location}', component);
+  // print('$i: ---------------------------');
+  // print('$i: parameters: \t${dItems[i].article}\t[${dItems[i].location}]');
+  // print('$i: length: ${result!.results!.length}');
+  // print('$i: context: ${result.results![0]}');
+
   dItems[i].latitude = await result!.results![0].geometry!.location!.lat!;
   dItems[i].longitude = await result.results![0].geometry!.location!.lng!;
   // print('$i\t${result!.results![0].geometry!.location!.lat}\t${result.results![0].geometry!.location!.lng}');
   //return result;
-  print(
-      '$i\t${dItems[i].article}\t${dItems[i].location}\t\t${dItems[i].latitude}\t${dItems[i].longitude}');
+
+  // print('$i: ==========================');
 }

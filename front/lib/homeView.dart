@@ -294,7 +294,7 @@ class _HomeViewState extends State<HomeView> {
       isLoading = true;
 
       http.Response result = await http.get(Uri.parse(
-          "https://daangnplus.doky.space/api/search?name=%EC%8A%A4%EC%BB%AC%ED%8A%B8%EB%9D%BC"));
+          "https://daangnplus.doky.space/api/search?name=아이패드%204세대"));
 
       List<dynamic> tmp = jsonDecode(result.body);
       for (var i in tmp) {

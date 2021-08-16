@@ -39,7 +39,7 @@ class _MapPageState extends State<MapPage> {
     loading = true;
   }
 
-  void openDraw() {
+  Future<void> openDraw() async {
     scaffoldKey.currentState!.openDrawer();
     setState(() {
       zoom = false;
@@ -47,7 +47,7 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  void openPhoneInfo(context, markerResource) {
+  Future<void> openPhoneInfo(context, markerResource) async {
     setState(() {
       zoom = false;
       scroll = false;
@@ -131,7 +131,21 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
               SizedBox(height: 20)
-            ])));
+            ]))).then((value) {
+      setState(() {
+        zoom = true;
+        scroll = true;
+      });
+    });
+  }
+
+  void mapControll(bool s) {
+    if (scaffoldKey.currentState!.isDrawerOpen == false) {
+      setState(() {
+        zoom = true;
+        scroll = true;
+      });
+    }
   }
 
   void showMyPosition() async {
@@ -162,9 +176,6 @@ class _MapPageState extends State<MapPage> {
                 openPhoneInfo(context, markerResource);
               }
             },
-            infoWindow: InfoWindow(title: '${dItems[i].location}'),
-            //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-            //icon: BitmapDescriptor.defaultMarkerWithHue(300),
             position: LatLng(dItems[i].latitude, dItems[i].longitude)));
       }
     }
@@ -198,6 +209,7 @@ class _MapPageState extends State<MapPage> {
               Navigator.pop(context);
             },
           )),
+      onDrawerChanged: mapControll,
       drawerScrimColor: Colors.white.withAlpha(0),
       drawerEnableOpenDragGesture: false,
       drawer: Drawer(
@@ -310,18 +322,9 @@ void getCoordinates() async {
 
 Future<GeocodingResponse?> geoCoding(int i) async {
   GoogleGeocoding googleGeocoding =
-      GoogleGeocoding("API_KEY");
+      GoogleGeocoding("api-key");
   var result =
       await googleGeocoding.geocoding.get('${dItems[i].location}', component);
-  // print('$i: ---------------------------');
-  // print('$i: parameters: \t${dItems[i].article}\t[${dItems[i].location}]');
-  // print('$i: length: ${result!.results!.length}');
-  // print('$i: context: ${result.results![0]}');
-
   dItems[i].latitude = await result!.results![0].geometry!.location!.lat!;
   dItems[i].longitude = await result.results![0].geometry!.location!.lng!;
-  // print('$i\t${result!.results![0].geometry!.location!.lat}\t${result.results![0].geometry!.location!.lng}');
-  //return result;
-
-  // print('$i: ==========================');
 }
